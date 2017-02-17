@@ -5,11 +5,18 @@ class UsersController < ApplicationController
   end
 
   def create
-  @user = User.new(params[:user])
-    if @user.save
+  # @user = User.new(params[:user])
+  #   if @user.save
+  #     redirect_to root_path, notice: 'Sign up complete. Please check your inbox for activation email.'
+  #   else
+  #     render action: "new"
+  #   end
+    @user = User.new(user_params)
+    if @user.valid?
+      @user.save
       redirect_to root_path, notice: 'Sign up complete. Please check your inbox for activation email.'
     else
-      render action: "new"
+      render action: “new”
     end
   end
 
@@ -21,6 +28,12 @@ class UsersController < ApplicationController
     else
       render action: "new"
     end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role)
   end
 
 end
